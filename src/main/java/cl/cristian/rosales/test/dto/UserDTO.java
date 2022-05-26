@@ -1,7 +1,5 @@
 package cl.cristian.rosales.test.dto;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.List;
 

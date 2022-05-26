@@ -1,6 +1,5 @@
 package cl.cristian.rosales.test.dto;
 
-import cl.cristian.rosales.test.models.User;
 import java.io.Serializable;
 
 public class PhoneDTO implements Serializable {
