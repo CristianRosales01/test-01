@@ -8,8 +8,6 @@ El proyecto completo utiliza los siguientes frameworks:
 * SpringBoot
 * H2
 * JPA
-* JUNIT
-* MOCKITO
 
 ## Dependencias
 
@@ -27,5 +25,49 @@ Clone el proyecto y use Maven para construir el servidor
 
 Para construir la imagen y ejecutar el contenedor de Docker, seguir las siguientes instrucciones:
 
-    $ docker build -t test-crosales .
-    $ docker run -d test-crosales -p 8080:8080
+    $ docker build -t test-docker .
+    $ docker run -d test-docker -p 8080:8080
+
+## OpenApi:
+
+URL: http://localhost:8080/swagger-ui/index.html
+
+## URL Endpoint:
+```
+    $ curl --location --request GET 'localhost:8080/1'
+```
+    $ curl --location --request POST 'http://localhost:8080/' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+    "name": "Juan Lopez",
+    "email": "j@gmail.com",
+    "password": "AB1234568abj",
+    "phones": [
+    {
+    "number": "87654321",
+    "city_code": "9",
+    "country_code": "57"
+    }
+    ]
+    }'
+```
+    $ curl --location --request GET 'localhost:8080/all'
+```
+    $curl --location --request PUT 'localhost:8080/' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+    "id": "1",
+    "name": "Ana Lopez",
+    "email": "a@gmail.com",
+    "password": "AB1234568abj",
+    "phones": [
+    {
+    "number": "87654321",
+    "city_code": "9",
+    "country_code": "57"
+    }
+    ]
+    }'
+```
+    $curl --location --request DELETE 'localhost:8080/1'
+```

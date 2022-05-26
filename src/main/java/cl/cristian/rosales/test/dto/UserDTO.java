@@ -11,8 +11,7 @@ public class UserDTO implements Serializable {
 
     private Long id;
     private String name;
-    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
-            flags = Pattern.Flag.CASE_INSENSITIVE)
+
     private String email;
     private String  password;
     private List<PhoneDTO> phones;

@@ -3,7 +3,6 @@ package cl.cristian.rosales.test.controller;
 import cl.cristian.rosales.test.dto.ResponseDTO;
 import cl.cristian.rosales.test.dto.UserDTO;
 import cl.cristian.rosales.test.exception.UserException;
-import cl.cristian.rosales.test.models.User;
 import cl.cristian.rosales.test.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -10,28 +10,26 @@ import cl.cristian.rosales.test.repository.IUserRepository;
 import cl.cristian.rosales.test.services.IUserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
-
-import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.exact;
 
 @Service
 public class UserService implements IUserService {
 
+    Logger logger = LogManager.getLogger(UserService.class);
     private final IUserRepository repository;
 
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
     public static final String REGEX_EMAIL = "([a-zA-Z0-9]+(?:[._+-][a-zA-Z0-9]+)*)@([a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+)*[.][a-zA-Z]{2,})";
-    public static final String REGEX_PASSWORD = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])";
+    public static final String REGEX_PASSWORD = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{0,9}$";
     @Value("${jwt.secret.key}")
     private String secret;
 
@@ -48,6 +46,7 @@ public class UserService implements IUserService {
                    id).orElseThrow(() -> new UserException("Usuario no encontrado"));
            userDTO = this.parserUserModelToDto(user);
         }catch (Exception ex){
+            logger.error(ex);
             throw new UserException(ex.getMessage());
         }
         return userDTO;
@@ -62,6 +61,7 @@ public class UserService implements IUserService {
                 userDTOList.add(this.parserUserModelToDto(user));
             }
         }catch (Exception ex){
+            logger.error(ex);
             throw new UserException(ex.getMessage());
         }
         return userDTOList;
@@ -92,6 +92,7 @@ public class UserService implements IUserService {
             User userReturn = this.repository.save(userModel);
             responseDTO = this.parserUserModelToResponseDto(userReturn);
         }catch (Exception ex){
+            logger.error(ex);
             throw new UserException(ex.getMessage());
         }
         return responseDTO;
@@ -102,7 +103,7 @@ public class UserService implements IUserService {
         UserDTO userDTOReturn;
         try{
             User userModel = this.repository.findById(userDTO.getId())
-                    .orElseThrow(() -> new UserException("User no encontrado"));
+                    .orElseThrow(() -> new UserException("Usuario no encontrado"));
 
             if (this.validateRegex(userDTO.getEmail(), REGEX_EMAIL)){
                 throw new UserException("Formato de correo incorrecto.");
@@ -117,6 +118,7 @@ public class UserService implements IUserService {
 
             userDTOReturn = parserUserModelToDto(userData);
         }catch (Exception ex){
+            logger.error(ex);
             throw new UserException(ex.getMessage());
         }
         return userDTOReturn;
@@ -129,8 +131,9 @@ public class UserService implements IUserService {
             this.repository.deleteById(id);
 
             this.repository.findById(id)
-                    .orElseThrow(() -> new UserException("User Eliminado"));
+                    .orElseThrow(() -> new UserException("Usuario Eliminado"));
         }catch (Exception ex){
+            logger.error(ex);
             throw new UserException(ex.getMessage());
         }
         return userDTO;
